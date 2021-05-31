@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_one.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:02 by user42            #+#    #+#             */
-/*   Updated: 2021/05/31 12:03:01 by user42           ###   ########.fr       */
+/*   Updated: 2021/05/31 14:16:44 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@ typedef struct  s_params
     int time_sleep;
     int nb_eat;
 }   t_params;
+
+typedef struct  s_philo
+{
+    int last_eat;
+    int nb_eat;
+}   t_philo;
 
 /*
 ** Parsing

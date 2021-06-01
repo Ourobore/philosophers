@@ -24,8 +24,8 @@ $(NAME)	:	$(OBJS) main.c
 fsan	:	$(OBJS) main.c
 			$(CC) $(CFLAGS) $(FSAN) main.c $(OBJS) $(INCLUDE) -o $(NAME)
 
-#leaks
-
+leaks	:	$(NAME)
+			valgrind --tool=memcheck --track-origins=yes --leak-check=full --leak-resolution=high --show-reachable=yes
 clean	:
 			rm -rf $(OBJS)
 

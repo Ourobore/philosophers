@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:06 by user42            #+#    #+#             */
-/*   Updated: 2021/06/01 12:00:38 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/02 12:11:54 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,18 @@ t_params	init_parameters(t_philo *philosophers, t_params params)
 	gettimeofday(&time, NULL);
 	while (i < params.nb_philo)
 	{
-		philosophers[i].last_eat = time.tv_sec * 1000;
+		philosophers[i].last_eat = params.start_time;
 		philosophers[i].id = i;
+		philosophers[i].params = &params;
 		if (pthread_mutex_init(&(params.forks[i]), NULL) != 0)
 			print_error("Error: mutex init failed", 5);
+		philosophers[i].left_fork = params.forks[i];
+		if (i == params.nb_philo - 1)
+			philosophers[i].right_fork = params.forks[0];
+		//else if (i == 0 && params.nb_philo == 1)
+		//	philosophers[i].right_fork = NULL;
+		else
+			philosophers[i].right_fork = params.forks[i + 1];
 		i++;
 	}
 	return (params);
@@ -36,21 +44,53 @@ unsigned long int	get_time_difference(unsigned long int old_time)
 	unsigned long int	time_difference;
 
 	gettimeofday(&time, NULL);
-	time_difference = (time.tv_sec * 1000) - old_time;
+	time_difference = ((time.tv_sec * 1000) + (time.tv_usec / 1000)) - old_time;
 	return (time_difference);
 }
 
-void	*philosopher_loop(void *void_params)
+void	ft_usleep(int	time_ms)
 {
-	t_params *params;
+	int	i;
+	int	nb_usleep;
 
-	params = void_params;
+	i = 0;
+	nb_usleep = 1000;
+	while (i < nb_usleep)
+	{
+		usleep(time_ms / nb_usleep);
+		i++;
+	}
+}
+
+void	*philosopher_loop(void *void_philo)
+{
+	t_philo *philo;
+
+	philo = void_philo;
 	while (1)
 	{
-		//pthread_mutex_lock(&params.forks[0]);
-		printf("[%lu] Philospher [%d] has taken a fork\n", get_time_difference(params->start_time), params->philo->id + 1);
-		usleep(1000000);
-		//pthread_mutex_unlock(&params.forks[0]);
+		pthread_mutex_lock(&philo->left_fork);
+		pthread_mutex_lock(&philo->params->message);
+		printf("[%lu] Philospher [%d] has taken a fork\n", get_time_difference(philo->params->start_time), philo->id + 1);
+		pthread_mutex_unlock(&philo->params->message);
+		pthread_mutex_lock(&philo->right_fork);
+		pthread_mutex_lock(&philo->params->message);
+		printf("[%lu] Philospher [%d] has taken a fork\n", get_time_difference(philo->params->start_time), philo->id + 1);
+		printf("[%lu] Philospher [%d] is eating\n", get_time_difference(philo->params->start_time), philo->id + 1);
+		pthread_mutex_unlock(&philo->params->message);
+		ft_usleep(philo->params->time_eat);
+		pthread_mutex_unlock(&philo->left_fork);
+		pthread_mutex_unlock(&philo->right_fork);
+		pthread_mutex_lock(&philo->params->message);
+		printf("[%lu] Philospher [%d] is sleeping\n", get_time_difference(philo->params->start_time), philo->id + 1);
+		pthread_mutex_unlock(&philo->params->message);
+		ft_usleep(philo->params->time_sleep);
+		pthread_mutex_lock(&philo->params->message);
+		printf("[%lu] Philospher [%d] is thinking\n", get_time_difference(philo->params->start_time), philo->id + 1);
+		pthread_mutex_unlock(&philo->params->message);
+		//printf("Message unlock\n");
+		//if 
+		//ft_usleep(100);
 	}
 }
 
@@ -83,6 +123,9 @@ int main(int argc, char *argv[])
     if (argc == 6)
         printf("nb_eat: %d\n", params.nb_eat);
 	
+	struct timeval	time;
+	gettimeofday(&time, NULL);
+	params.start_time = (time.tv_sec * 1000) + (time.tv_usec / 1000);
     params.philo = NULL;
     params.philo = malloc(sizeof(t_philo) * params.nb_philo);
     if (!params.philo)
@@ -101,7 +144,8 @@ int main(int argc, char *argv[])
 	pthread_t id;
 	while (i < params.nb_philo)
 	{
-		pthread_create(&id, NULL, &philosopher_loop, &params);
+		pthread_create(&id, NULL, &philosopher_loop, &params.philo[i]);
+		ft_usleep(50);
 		i++;
 	}
 	while (1)

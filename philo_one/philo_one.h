@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:02 by user42            #+#    #+#             */
-/*   Updated: 2021/06/01 11:52:50 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/02 10:10:23 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,9 @@ typedef struct  s_params
     int time_eat;
     int time_sleep;
     int nb_eat;
-	int	start_time;
+	unsigned long int	start_time;
 	pthread_mutex_t *forks;
+	pthread_mutex_t	message;
 	t_philo	*philo;
 }   t_params;
 
@@ -39,6 +40,7 @@ typedef struct  s_philo
     int nb_eat;
 	pthread_mutex_t left_fork;
 	pthread_mutex_t right_fork;
+	t_params	*params;
 }   t_philo;
 
 /*

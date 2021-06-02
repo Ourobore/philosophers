@@ -1,6 +1,8 @@
 SRCS	=	$(DIR)/parsing.c \
 			$(DIR)/lil_atoi.c \
+			$(DIR)/philosopher.c \
 			$(DIR)/print_message.c \
+			$(DIR)/time.c \
 			$(DIR)/error.c
 
 DIR		=	./srcs

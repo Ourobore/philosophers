@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:06 by user42            #+#    #+#             */
-/*   Updated: 2021/06/02 12:11:54 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/02 16:39:14 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_params	init_parameters(t_philo *philosophers, t_params params)
 	}
 	return (params);
 }
-
+/*
 unsigned long int	get_time_difference(unsigned long int old_time)
 {
 	struct timeval	time;
@@ -47,19 +47,34 @@ unsigned long int	get_time_difference(unsigned long int old_time)
 	time_difference = ((time.tv_sec * 1000) + (time.tv_usec / 1000)) - old_time;
 	return (time_difference);
 }
-
-void	ft_usleep(int	time_ms)
+*/
+unsigned long int	get_time()
 {
-	int	i;
-	int	nb_usleep;
+	struct timeval	time_struct;
+	unsigned long int	time;
 
-	i = 0;
-	nb_usleep = 1000;
-	while (i < nb_usleep)
-	{
-		usleep(time_ms / nb_usleep);
-		i++;
-	}
+	gettimeofday(&time_struct, NULL);
+	time = (time_struct.tv_sec * 1000) + (time_struct.tv_usec / 1000);
+	return (time);
+}
+
+unsigned long int	get_timestamp(unsigned long int old_time)
+{
+	unsigned long int	time;
+	unsigned long int	timestamp;
+
+	time = get_time();
+	timestamp = time - old_time;
+	return (timestamp);
+}
+
+void	ft_usleep(unsigned long int	time_ms)
+{
+	unsigned long int	new_time;
+
+	new_time = get_time() + time_ms;
+	while (get_time() < new_time)
+		usleep(time_ms);
 }
 
 void	*philosopher_loop(void *void_philo)
@@ -70,26 +85,19 @@ void	*philosopher_loop(void *void_philo)
 	while (1)
 	{
 		pthread_mutex_lock(&philo->left_fork);
-		pthread_mutex_lock(&philo->params->message);
-		printf("[%lu] Philospher [%d] has taken a fork\n", get_time_difference(philo->params->start_time), philo->id + 1);
-		pthread_mutex_unlock(&philo->params->message);
+		print_fork(get_timestamp(philo->params->start_time), philo->id, *philo->params);
 		pthread_mutex_lock(&philo->right_fork);
-		pthread_mutex_lock(&philo->params->message);
-		printf("[%lu] Philospher [%d] has taken a fork\n", get_time_difference(philo->params->start_time), philo->id + 1);
-		printf("[%lu] Philospher [%d] is eating\n", get_time_difference(philo->params->start_time), philo->id + 1);
-		pthread_mutex_unlock(&philo->params->message);
+		print_fork(get_timestamp(philo->params->start_time), philo->id, *philo->params);
+		print_eat(get_timestamp(philo->params->start_time), philo->id, *philo->params);
+		printf("[%lu] Last eat before:[%d] %lu\n", get_timestamp(philo->params->start_time), philo->id, get_timestamp(philo->last_eat));
+		philo->last_eat = get_time();
+		printf("[%lu] Last eat after:[%d] %lu\n", get_timestamp(philo->params->start_time), philo->id, get_timestamp(philo->last_eat));
 		ft_usleep(philo->params->time_eat);
 		pthread_mutex_unlock(&philo->left_fork);
 		pthread_mutex_unlock(&philo->right_fork);
-		pthread_mutex_lock(&philo->params->message);
-		printf("[%lu] Philospher [%d] is sleeping\n", get_time_difference(philo->params->start_time), philo->id + 1);
-		pthread_mutex_unlock(&philo->params->message);
+		print_sleep(get_timestamp(philo->params->start_time), philo->id, *philo->params);
 		ft_usleep(philo->params->time_sleep);
-		pthread_mutex_lock(&philo->params->message);
-		printf("[%lu] Philospher [%d] is thinking\n", get_time_difference(philo->params->start_time), philo->id + 1);
-		pthread_mutex_unlock(&philo->params->message);
-		//printf("Message unlock\n");
-		//if 
+		print_think(get_timestamp(philo->params->start_time), philo->id, *philo->params);
 		//ft_usleep(100);
 	}
 }
@@ -125,7 +133,7 @@ int main(int argc, char *argv[])
 	
 	struct timeval	time;
 	gettimeofday(&time, NULL);
-	params.start_time = (time.tv_sec * 1000) + (time.tv_usec / 1000);
+	params.start_time = get_time());
     params.philo = NULL;
     params.philo = malloc(sizeof(t_philo) * params.nb_philo);
     if (!params.philo)
@@ -146,9 +154,24 @@ int main(int argc, char *argv[])
 	{
 		pthread_create(&id, NULL, &philosopher_loop, &params.philo[i]);
 		ft_usleep(50);
-		i++;
+		if (i + 2 >= params.nb_philo && i % 2 == 0)
+			i = 1;
+		else
+			i += 2;
 	}
 	while (1)
-	{}
+	{
+		i = 0;
+		while (i < params.nb_philo)
+		{	
+			gettimeofday(&time, NULL);
+			if (get_timestamp(params.philo[i].last_eat) > (unsigned long int)params.time_die)
+			{
+				print_die(get_timestamp(params.philo->params->start_time), params.philo->id, params);
+				exit(1);
+			}
+			i++;
+		}
+	}
 	params = clean_parameters(params);
 }

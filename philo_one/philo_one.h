@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:02 by user42            #+#    #+#             */
-/*   Updated: 2021/06/02 10:10:23 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/02 16:44:34 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,20 @@ typedef struct  s_philo
 t_params    get_parameters(char *argv[]);
 int lil_atoi(const char *str);
 
+/*
+** Time functions
+*/
+unsigned long int	get_time();
+unsigned long int	get_timestamp(unsigned long int old_time);
+
+/*
+** Print message
+*/
+void	print_eat(unsigned long int timestamp, int philo_id, t_params params);
+void	print_sleep(unsigned long int timestamp, int philo_id, t_params params);
+void	print_think(unsigned long int timestamp, int philo_id, t_params params);
+void	print_die(unsigned long int timestamp, int philo_id, t_params params);
+void	print_fork(unsigned long int timestamp, int philo_id, t_params params);
 
 
 /*

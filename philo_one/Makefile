@@ -1,5 +1,6 @@
 SRCS	=	$(DIR)/parsing.c \
 			$(DIR)/lil_atoi.c \
+			$(DIR)/print_message.c \
 			$(DIR)/error.c
 
 DIR		=	./srcs

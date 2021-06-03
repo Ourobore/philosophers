@@ -6,13 +6,13 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 11:26:37 by user42            #+#    #+#             */
-/*   Updated: 2021/05/31 13:16:53 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/03 14:10:23 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo_one.h"
 
-int lil_atoi(const char *str)
+int	lil_atoi(const char *str)
 {
 	unsigned long int	i;
 	unsigned long int	nb;
@@ -24,7 +24,7 @@ int lil_atoi(const char *str)
 		nb = (nb * 10) + (str[i] - 48);
 		i++;
 	}
-    if (str[i] != '\0' || nb > INT_MAX)
-        return (-1);
+	if (str[i] != '\0' || nb > INT_MAX)
+		return (-1);
 	return (nb);
 }

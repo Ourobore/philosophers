@@ -6,15 +6,15 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 16:47:21 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/02 16:47:49 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/03 14:05:14 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo_one.h"
 
-unsigned long int	get_time()
+unsigned long int	get_time(void)
 {
-	struct timeval	time_struct;
+	struct timeval		time_struct;
 	unsigned long int	time;
 
 	gettimeofday(&time_struct, NULL);

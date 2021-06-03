@@ -1,4 +1,4 @@
-SRCS	=	$(DIR)/parsing.c \
+SRCS	=	$(DIR)/init.c \
 			$(DIR)/lil_atoi.c \
 			$(DIR)/philosopher.c \
 			$(DIR)/print_message.c \
@@ -13,7 +13,7 @@ OBJS	:=	$(SRCS:.c=.o)
 
 CC		=	clang
 
-CFLAGS	=	-Wall -Wextra -Werror -pthread
+CFLAGS	=	-Wall -Wextra -Werror -pthread -D_REENTRANT
 
 FSAN	=	-g3 -fsanitize=address
 

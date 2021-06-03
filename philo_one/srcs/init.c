@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 13:16:18 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/03 14:07:20 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/03 15:22:58 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,28 @@ t_params	get_parameters(char *argv[])
 		i++;
 	}
 	return (params);
+}
+
+t_philo	*init_philo(t_params parameters)
+{
+	t_philo	*philosophers;
+
+	philosophers = NULL;
+	philosophers = malloc(sizeof(t_philo) * parameters.nb_philo);
+	if (!philosophers)
+		print_error("Error: malloc failed", 1);
+	memset(philosophers, 0, parameters.nb_philo);
+	return (philosophers);
+}
+
+pthread_mutex_t	*init_forks(t_params parameters)
+{
+	pthread_mutex_t	*forks;
+
+	forks = NULL;
+	forks = malloc(sizeof(pthread_mutex_t) * parameters.nb_philo);
+	if (!forks)
+		print_error("Error: malloc failed", 1);
+	memset(forks, 0, parameters.nb_philo);
+	return (forks);
 }

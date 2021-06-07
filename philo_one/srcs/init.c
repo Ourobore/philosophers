@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 13:16:18 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/03 15:22:58 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/03 17:07:48 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,3 +63,4 @@ pthread_mutex_t	*init_forks(t_params parameters)
 	memset(forks, 0, parameters.nb_philo);
 	return (forks);
 }
+

@@ -1,40 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/31 10:31:06 by user42            #+#    #+#             */
-/*   Updated: 2021/06/07 12:06:56 by lchapren         ###   ########.fr       */
+/*   Created: 2021/06/07 12:08:15 by lchapren          #+#    #+#             */
+/*   Updated: 2021/06/07 12:20:34 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo_one.h"
+#include "../philo_one.h"
 
-int	main(int argc, char *argv[])
+void	philosphers_monitor(void *void_philosophers)
 {
-	t_params	parameters;
-	t_philo		*philosophers;
+	int					i;
+	unsigned long int	last_eat;
+	t_philo				*philosophers;
+	t_params			parameters;
 
-	if (argc != 5 && argc != 6)
-		print_error("Error: wrong number of parameters", 2);
-	parameters = get_parameters(argv);
-	philosophers = init_philo(parameters);
-	parameters.philosophers = philosophers;
-	parameters.forks = init_forks(parameters);
-	parameters = init_parameters(philosophers, parameters);
-	launch_philosphers(philosophers, parameters);
-
-	int	i;
-
-	i = 0;
+	philosophers = void_philosophers;
+	parameters = *philosophers->parameters;
 	while (1)
 	{
 		i = 0;
 		while (i < parameters.nb_philo)
 		{	
-			if (get_timestamp(parameters.philosophers[i].last_eat) > (unsigned long int)parameters.time_die + 10)
+			last_eat = get_timestamp(parameters.philosophers[i].last_eat);
+			if (last_eat > (unsigned long int)parameters.time_die + 10)
 			{
 				print_die(get_timestamp(parameters.start_time), philosophers[i].id, parameters);
 				exit(1);

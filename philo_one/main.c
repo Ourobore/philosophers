@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:06 by user42            #+#    #+#             */
-/*   Updated: 2021/06/07 16:20:04 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/07 16:39:31 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	main(int argc, char *argv[])
 		{	
 			if (get_timestamp(parameters.philosophers[i].last_eat) > (unsigned long int)parameters.time_die + 10)
 			{
+				//printf("prout\n");
 				print_die(get_timestamp(parameters.start_time), philosophers[i].id, parameters);
 				exit(1);
 			}
@@ -52,6 +53,5 @@ int	main(int argc, char *argv[])
 		}
 		usleep(1000);
 	}
-	parameters = clean_parameters(parameters);
-
+	//parameters = clean_parameters(parameters);
 }

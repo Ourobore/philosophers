@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 17:07:52 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/07 16:13:26 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/07 16:43:25 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ void	launch_philosphers(t_philo *philosophers, t_params parameters)
 	while (i < parameters.nb_philo)
 	{
 		pthread_create(&id, NULL, &philosopher_loop, &philosophers[i]);
-		pthread_detach(id);
-		ft_usleep(50);
+		//pthread_detach(id);
+		usleep(50);
 		if (i + 2 >= parameters.nb_philo && i % 2 == 0)
 			i = 1;
 		else
@@ -76,9 +76,7 @@ void	*philosopher_loop(void *void_philosopher)
 		pthread_mutex_lock(&philosopher->right_fork);
 		print_fork(get_timestamp(parameters.start_time), philosopher->id, parameters);
 		print_eat(get_timestamp(parameters.start_time), philosopher->id, parameters);
-		//printf("[%lu] Last eat before:[%d] %lu\n", get_timestamp(parameters.start_time), philosopher->id, get_timestamp(philosopher->last_eat));
 		philosopher->last_eat = get_time();
-		//printf("[%lu] Last eat after:[%d] %lu\n", get_timestamp(parameters.start_time), philosopher->id, get_timestamp(philosopher->last_eat));
 		ft_usleep(parameters.time_eat);
 		pthread_mutex_unlock(&philosopher->left_fork);
 		pthread_mutex_unlock(&philosopher->right_fork);

@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 17:07:52 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/07 12:04:44 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/07 16:13:26 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,15 @@ void	launch_philosphers(t_philo *philosophers, t_params parameters)
 	while (i < parameters.nb_philo)
 	{
 		pthread_create(&id, NULL, &philosopher_loop, &philosophers[i]);
+		pthread_detach(id);
 		ft_usleep(50);
 		if (i + 2 >= parameters.nb_philo && i % 2 == 0)
 			i = 1;
 		else
 			i += 2;
 	}
+	//pthread_create(&id, NULL, &philosopher_monitor, &philosophers);
+	//pthread_detach(id);
 }
 
 void	*philosopher_loop(void *void_philosopher)

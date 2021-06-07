@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:06 by user42            #+#    #+#             */
-/*   Updated: 2021/06/07 12:06:56 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/07 16:20:04 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,15 @@ int	main(int argc, char *argv[])
 	parameters.forks = init_forks(parameters);
 	parameters = init_parameters(philosophers, parameters);
 	launch_philosphers(philosophers, parameters);
+	//pthread_t	id;
+	//if (pthread_create(&id, NULL, &philosopher_monitor, &philosophers) != 0)
+	//	print_error("Error: thread creation failed", 8);
+	//while (1)
+	//{	
+	//}
+	//usleep(1000);
+	//pthread_mutex_lock(parameters.end_lock);
+	//pthread_mutex_unlock(parameters.end_lock);
 
 	int	i;
 
@@ -39,9 +48,10 @@ int	main(int argc, char *argv[])
 				print_die(get_timestamp(parameters.start_time), philosophers[i].id, parameters);
 				exit(1);
 			}
-			ft_usleep(50);
 			i++;
 		}
+		usleep(1000);
 	}
 	parameters = clean_parameters(parameters);
+
 }

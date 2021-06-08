@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:02 by user42            #+#    #+#             */
-/*   Updated: 2021/06/07 15:31:44 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/08 10:21:22 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_params
 	unsigned long int	start_time;
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		message;
+	pthread_mutex_t		end_lock;
 	t_philo				*philosophers;
 }						t_params;
 

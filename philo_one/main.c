@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:06 by user42            #+#    #+#             */
-/*   Updated: 2021/06/07 16:39:31 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/08 10:48:01 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	main(int argc, char *argv[])
 	parameters.forks = init_forks(parameters);
 	parameters = init_parameters(philosophers, parameters);
 	launch_philosphers(philosophers, parameters);
+	usleep(1000);
 	//pthread_t	id;
 	//if (pthread_create(&id, NULL, &philosopher_monitor, &philosophers) != 0)
 	//	print_error("Error: thread creation failed", 8);
@@ -32,9 +33,11 @@ int	main(int argc, char *argv[])
 	//{	
 	//}
 	//usleep(1000);
-	//pthread_mutex_lock(parameters.end_lock);
+	pthread_mutex_lock(&parameters.end_lock);
+	printf("out\n");
+	parameters = clean_parameters(parameters);
 	//pthread_mutex_unlock(parameters.end_lock);
-
+/*
 	int	i;
 
 	i = 0;
@@ -43,10 +46,11 @@ int	main(int argc, char *argv[])
 		i = 0;
 		while (i < parameters.nb_philo)
 		{	
-			if (get_timestamp(parameters.philosophers[i].last_eat) > (unsigned long int)parameters.time_die + 10)
+			if (get_timestamp(parameters.philosophers[i].last_eat) > (unsigned long int)parameters.time_die)
 			{
 				//printf("prout\n");
 				print_die(get_timestamp(parameters.start_time), philosophers[i].id, parameters);
+				printf("exit\n");
 				exit(1);
 			}
 			i++;
@@ -54,4 +58,5 @@ int	main(int argc, char *argv[])
 		usleep(1000);
 	}
 	//parameters = clean_parameters(parameters);
+	*/
 }

@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:06 by user42            #+#    #+#             */
-/*   Updated: 2021/06/08 15:14:05 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/08 15:36:41 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,10 @@ int	main(int argc, char *argv[])
 	parameters.philosophers = philosophers;
 	parameters.forks = init_forks(parameters);
 	parameters = init_parameters(philosophers, parameters);
-	if (!(parameters.nb_philo == 0 || parameters.nb_eat == 0))
-		monitor_id = launch_philosphers(philosophers, parameters);
-	monitor(philosophers, parameters);
-	//pthread_join(monitor_id, NULL);
+	//if (!(parameters.nb_philo == 0 || parameters.nb_eat == 0))
+	monitor_id = launch_philosphers(philosophers, parameters);
+	//monitor(philosophers, parameters);
+	pthread_join(monitor_id, NULL);
 	//printf("out\n");
 	parameters = clean_parameters(parameters);
 }

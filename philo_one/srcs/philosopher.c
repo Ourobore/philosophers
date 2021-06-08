@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 17:07:52 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/08 15:03:18 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/08 15:38:41 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ t_params	init_parameters(t_philo *philosophers, t_params parameters)
 
 	i = 0;
 	parameters.start_time = get_time();
+	philosophers->parameters = &parameters;
 	if (pthread_mutex_init(&parameters.message, NULL) != 0)
 		print_error("Error: mutex init failed", 5);
 	while (i < parameters.nb_philo)

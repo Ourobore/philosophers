@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 17:07:52 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/08 14:04:48 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/08 14:30:58 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ t_params	init_parameters(t_philo *philosophers, t_params parameters)
 		philosophers[i].parameters = &parameters;
 		philosophers[i].message = &parameters.message;
 		philosophers[i].last_eat = parameters.start_time;
+		philosophers[i].nb_eat = 0;
 		philosophers[i].left_fork = parameters.forks[i];
 		if (i == parameters.nb_philo - 1)
 			philosophers[i].right_fork = parameters.forks[0];
@@ -79,6 +80,7 @@ void	*philosopher_loop(void *void_philosopher)
 		print_eat(get_timestamp(parameters.start_time), *philosopher);
 		philosopher->last_eat = get_time();
 		ft_usleep(parameters.time_eat);
+		philosopher->nb_eat++;
 		pthread_mutex_unlock(&philosopher->left_fork);
 		pthread_mutex_unlock(&philosopher->right_fork);
 		print_sleep(get_timestamp(parameters.start_time), *philosopher);

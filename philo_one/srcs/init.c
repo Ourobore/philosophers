@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 13:16:18 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/08 11:41:10 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/08 14:36:19 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ t_params	get_parameters(char *argv[])
 	i = 1;
 	while (argv[i])
 	{
-		value = 0;
 		value = lil_atoi(argv[i]);
 		if (value == -1)
 			print_error("Error: parameter not valid", 3);
@@ -37,6 +36,8 @@ t_params	get_parameters(char *argv[])
 			params.nb_eat = value;
 		i++;
 	}
+	if (i == 5)
+		params.nb_eat = -1;
 	return (params);
 }
 

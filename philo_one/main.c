@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:06 by user42            #+#    #+#             */
-/*   Updated: 2021/06/08 13:34:19 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/08 14:46:20 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,15 @@
 void	monitor(t_philo *philosophers, t_params parameters)
 {
 	int					i;
+	int					eating_done;
 	unsigned long int	last_eat;
 	
+	if (parameters.nb_philo == 0)
+		return ;
 	while (1)
 	{
 		i = 0;
+		eating_done = 1;
 		while (i < parameters.nb_philo)
 		{	
 			last_eat = get_timestamp(parameters.philosophers[i].last_eat);
@@ -29,7 +33,14 @@ void	monitor(t_philo *philosophers, t_params parameters)
 				ft_usleep(parameters.time_die);
 				return ;
 			}
+			if (parameters.nb_eat != -1 && philosophers->nb_eat < parameters.nb_eat)
+				eating_done = 0;
 			i++;
+		}
+		if (parameters.nb_eat != -1 && eating_done)
+		{
+			printf("Each philosphers ate at least %d times. End of simulation\n", parameters.nb_eat);
+			return ;
 		}
 		usleep(1000);
 	}
@@ -48,7 +59,8 @@ int	main(int argc, char *argv[])
 	parameters.philosophers = philosophers;
 	parameters.forks = init_forks(parameters);
 	parameters = init_parameters(philosophers, parameters);
-	monitor_id = launch_philosphers(philosophers, parameters);
+	if (!(parameters.nb_philo == 0 || parameters.nb_eat == 0))
+		monitor_id = launch_philosphers(philosophers, parameters);
 	monitor(philosophers, parameters);
 	//pthread_join(monitor_id, NULL);
 	printf("out\n");

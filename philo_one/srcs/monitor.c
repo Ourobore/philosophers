@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 12:08:15 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/08 12:19:07 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/08 14:45:43 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@ void	*philosopher_monitor(void *void_philosophers)
 
 	philosophers = void_philosophers;
 	parameters = *philosophers->parameters;
+	if (parameters.nb_philo == 0)
+		return (NULL);
 	while (1)
 	{
 		i = 0;

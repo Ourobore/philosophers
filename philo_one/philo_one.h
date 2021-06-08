@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:02 by user42            #+#    #+#             */
-/*   Updated: 2021/06/08 10:21:22 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/08 11:20:41 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ typedef struct s_params
 	unsigned long int	start_time;
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		message;
-	pthread_mutex_t		end_lock;
+	//pthread_mutex_t		end_lock;
 	t_philo				*philosophers;
 }						t_params;
 
@@ -44,6 +44,7 @@ typedef struct s_philo
 	unsigned long int	last_eat;
 	pthread_mutex_t		left_fork;
 	pthread_mutex_t		right_fork;
+	pthread_mutex_t		*message;
 	t_params			*parameters;
 }						t_philo;
 
@@ -64,7 +65,7 @@ pthread_mutex_t		*init_forks(t_params parameters);
 ** Philosopher functions
 */
 t_params			init_parameters(t_philo *philosophers, t_params params);
-void				launch_philosphers(t_philo *philosophers, \
+pthread_t			launch_philosphers(t_philo *philosophers, \
 									t_params parameters);
 void				*philosopher_loop(void *void_philo);
 t_params			clean_parameters(t_params params);
@@ -81,15 +82,15 @@ void				ft_usleep(unsigned long int	time_ms);
 ** Print message
 */
 void				print_eat(unsigned long int timestamp, \
-							int philosopher_id, t_params parameters);
+							t_philo philosopher);
 void				print_sleep(unsigned long int timestamp, \
-							int philosopher_id, t_params parameters);
+							t_philo philosopher);
 void				print_think(unsigned long int timestamp, \
-							int philosopher_id, t_params parameters);
+							t_philo philosopher);
 void				print_die(unsigned long int timestamp, \
-							int philosopher_id, t_params parameters);
+							t_philo philosopher);
 void				print_fork(unsigned long int timestamp, \
-							int philopher_id, t_params parameters);
+							t_philo philosopher);
 
 /*
 ** Utility

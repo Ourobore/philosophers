@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 12:08:15 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/08 10:46:08 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/08 11:45:23 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	*philosopher_monitor(void *void_philosophers)
 
 	philosophers = void_philosophers;
 	parameters = *philosophers->parameters;
-	pthread_mutex_lock(&parameters.end_lock);
+	//pthread_mutex_lock(&parameters.end_lock);
 	while (1)
 	{
 		i = 0;
@@ -30,14 +30,12 @@ void	*philosopher_monitor(void *void_philosophers)
 			last_eat = get_timestamp(parameters.philosophers[i].last_eat);
 			if (last_eat > (unsigned long int)parameters.time_die)
 			{
-				print_die(get_timestamp(parameters.start_time), philosophers[i].id, parameters);
-				printf("exit\n");
-				pthread_mutex_unlock(&parameters.end_lock);
-				return (NULL);//exit(1);
+				print_die(get_timestamp(parameters.start_time), philosophers[i]);
+				ft_usleep(parameters.time_die);
+				return (NULL);
 			}
 			i++;
 		}
 		usleep(1000);
 	}
-	//parameters = clean_parameters(parameters);
 }

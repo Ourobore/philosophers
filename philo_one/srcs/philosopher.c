@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 17:07:52 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/08 10:48:13 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/08 11:41:28 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ t_params	init_parameters(t_philo *philosophers, t_params parameters)
 
 	i = 0;
 	parameters.start_time = get_time();
-	if (pthread_mutex_init(&parameters.end_lock, NULL) != 0)
-		print_error("Error: mutex init failed", 5);
+	//if (pthread_mutex_init(&parameters.end_lock, NULL) != 0)
+	//	print_error("Error: mutex init failed", 5);
 	if (pthread_mutex_init(&parameters.message, NULL) != 0)
 		print_error("Error: mutex init failed", 5);
 	while (i < parameters.nb_philo)
@@ -31,6 +31,7 @@ t_params	init_parameters(t_philo *philosophers, t_params parameters)
 	i = 0;
 	while (i < parameters.nb_philo)
 	{
+		philosophers[i].message = &parameters.message;
 		philosophers[i].last_eat = parameters.start_time;
 		philosophers[i].id = i + 1;
 		philosophers[i].parameters = &parameters;
@@ -44,7 +45,7 @@ t_params	init_parameters(t_philo *philosophers, t_params parameters)
 	return (parameters);
 }
 
-void	launch_philosphers(t_philo *philosophers, t_params parameters)
+pthread_t	launch_philosphers(t_philo *philosophers, t_params parameters)
 {
 	int			i;
 	pthread_t	id;
@@ -61,7 +62,7 @@ void	launch_philosphers(t_philo *philosophers, t_params parameters)
 			i += 2;
 	}
 	pthread_create(&id, NULL, &philosopher_monitor, philosophers);
-	//pthread_detach(id);
+	return (id);
 }
 
 void	*philosopher_loop(void *void_philosopher)
@@ -74,17 +75,17 @@ void	*philosopher_loop(void *void_philosopher)
 	while (1)
 	{
 		pthread_mutex_lock(&philosopher->left_fork);
-		print_fork(get_timestamp(parameters.start_time), philosopher->id, parameters);
+		print_fork(get_timestamp(parameters.start_time), *philosopher);
 		pthread_mutex_lock(&philosopher->right_fork);
-		print_fork(get_timestamp(parameters.start_time), philosopher->id, parameters);
-		print_eat(get_timestamp(parameters.start_time), philosopher->id, parameters);
+		print_fork(get_timestamp(parameters.start_time), *philosopher);
+		print_eat(get_timestamp(parameters.start_time), *philosopher);
 		philosopher->last_eat = get_time();
 		ft_usleep(parameters.time_eat);
 		pthread_mutex_unlock(&philosopher->left_fork);
 		pthread_mutex_unlock(&philosopher->right_fork);
-		print_sleep(get_timestamp(parameters.start_time), philosopher->id, parameters);
+		print_sleep(get_timestamp(parameters.start_time), *philosopher);
 		ft_usleep(parameters.time_sleep);
-		print_think(get_timestamp(parameters.start_time), philosopher->id, parameters);
+		print_think(get_timestamp(parameters.start_time), *philosopher);
 	}
 }
 
@@ -99,7 +100,7 @@ t_params	clean_parameters(t_params parameters)
 		i++;
 	}
 	pthread_mutex_destroy(&parameters.message);
-	pthread_mutex_destroy(&parameters.end_lock);
+	//pthread_mutex_destroy(&parameters.end_lock);
 	free(parameters.forks);
 	free(parameters.philosophers);
 	return (parameters);

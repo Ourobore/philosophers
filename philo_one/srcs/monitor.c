@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 12:08:15 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/08 14:45:43 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/08 15:01:16 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	*philosopher_monitor(void *void_philosophers)
 {
 	int					i;
+	int					eating_done;
 	unsigned long int	last_eat;
 	t_philo				*philosophers;
 	t_params			parameters;
@@ -26,6 +27,7 @@ void	*philosopher_monitor(void *void_philosophers)
 	while (1)
 	{
 		i = 0;
+		eating_done = 1;
 		while (i < parameters.nb_philo)
 		{	
 			last_eat = get_timestamp(parameters.philosophers[i].last_eat);
@@ -35,7 +37,14 @@ void	*philosopher_monitor(void *void_philosophers)
 				ft_usleep(parameters.time_die);
 				return (NULL);
 			}
+			if (parameters.nb_eat != -1 && philosophers->nb_eat < parameters.nb_eat)
+				eating_done = 0;
 			i++;
+		}
+		if (parameters.nb_eat != -1 && eating_done)
+		{
+			printf("Each philosphers ate at least %d times. End of simulation\n", parameters.nb_eat);
+			return (NULL);
 		}
 		usleep(1000);
 	}

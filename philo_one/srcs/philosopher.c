@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 17:07:52 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/08 14:30:58 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/08 15:03:18 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ pthread_t	launch_philosphers(t_philo *philosophers, t_params parameters)
 		else
 			i += 2;
 	}
-	//pthread_create(&id, NULL, &philosopher_monitor, philosophers);
+	pthread_create(&id, NULL, &philosopher_monitor, philosophers);
 	return (id);
 }
 

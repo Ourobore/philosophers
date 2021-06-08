@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 17:07:52 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/08 11:41:28 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/08 14:04:48 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ t_params	init_parameters(t_philo *philosophers, t_params parameters)
 
 	i = 0;
 	parameters.start_time = get_time();
-	//if (pthread_mutex_init(&parameters.end_lock, NULL) != 0)
-	//	print_error("Error: mutex init failed", 5);
 	if (pthread_mutex_init(&parameters.message, NULL) != 0)
 		print_error("Error: mutex init failed", 5);
 	while (i < parameters.nb_philo)
@@ -31,10 +29,10 @@ t_params	init_parameters(t_philo *philosophers, t_params parameters)
 	i = 0;
 	while (i < parameters.nb_philo)
 	{
-		philosophers[i].message = &parameters.message;
-		philosophers[i].last_eat = parameters.start_time;
 		philosophers[i].id = i + 1;
 		philosophers[i].parameters = &parameters;
+		philosophers[i].message = &parameters.message;
+		philosophers[i].last_eat = parameters.start_time;
 		philosophers[i].left_fork = parameters.forks[i];
 		if (i == parameters.nb_philo - 1)
 			philosophers[i].right_fork = parameters.forks[0];
@@ -61,7 +59,7 @@ pthread_t	launch_philosphers(t_philo *philosophers, t_params parameters)
 		else
 			i += 2;
 	}
-	pthread_create(&id, NULL, &philosopher_monitor, philosophers);
+	//pthread_create(&id, NULL, &philosopher_monitor, philosophers);
 	return (id);
 }
 
@@ -100,7 +98,6 @@ t_params	clean_parameters(t_params parameters)
 		i++;
 	}
 	pthread_mutex_destroy(&parameters.message);
-	//pthread_mutex_destroy(&parameters.end_lock);
 	free(parameters.forks);
 	free(parameters.philosophers);
 	return (parameters);

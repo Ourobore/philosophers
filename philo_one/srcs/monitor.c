@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 12:08:15 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/08 11:45:23 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/08 12:19:07 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	*philosopher_monitor(void *void_philosophers)
 
 	philosophers = void_philosophers;
 	parameters = *philosophers->parameters;
-	//pthread_mutex_lock(&parameters.end_lock);
 	while (1)
 	{
 		i = 0;

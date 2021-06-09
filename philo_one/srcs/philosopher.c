@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 17:07:52 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/09 14:02:58 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/09 15:18:15 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ t_params	init_parameters(t_philo *philosophers, t_params parameters)
 
 	i = 0;
 	parameters.start_time = get_time();
-	//parameters.end_threads = 0;
 	if (pthread_mutex_init(&parameters.message, NULL) != 0)
 		print_error("Error: mutex init failed", 5);
 	while (i < parameters.nb_philo)
@@ -54,8 +53,8 @@ pthread_t	launch_philosphers(t_philo *philosophers, t_params parameters)
 	i = 0;
 	while (i < parameters.nb_philo)
 	{
-		pthread_create(&philosophers[i].thread_id, NULL, &philosopher_loop, &philosophers[i]);
-		//pthread_detach(philosophers[i].thread_id);
+		pthread_create(&philosophers[i].thread_id, NULL, \
+					&philosopher_loop, &philosophers[i]);
 		usleep(50);
 		if (i + 2 >= parameters.nb_philo && i % 2 == 0)
 			i = 1;
@@ -75,6 +74,7 @@ void	*philosopher_loop(void *void_philosopher)
 	parameters = *philosopher->parameters;
 	while (!philosopher->end_thread)
 	{
+		printf("end_thread: %d\n", philosopher->end_thread);
 		pthread_mutex_lock(&philosopher->left_fork);
 		print_fork(get_timestamp(parameters.start_time), *philosopher);
 		pthread_mutex_lock(&philosopher->right_fork);
@@ -89,6 +89,7 @@ void	*philosopher_loop(void *void_philosopher)
 		ft_usleep(parameters.time_sleep);
 		print_think(get_timestamp(parameters.start_time), *philosopher);
 	}
+	printf("[%d]end: %d\n", philosopher->id, philosopher->end_thread);
 	return (NULL);
 }
 
@@ -97,21 +98,15 @@ void	clean_parameters(t_philo *philosophers, t_params parameters)
 	int	i;
 
 	i = 0;
-	//while (i < parameters.nb_philo)
-	//{
-	//	philosophers[i].end_thread = 1;
-	//	i++;
-	//}
-	//ft_usleep(parameters.time_die);
-	//i = 0;
+	ft_usleep(parameters.time_die);
 	while (i < parameters.nb_philo)
 	{
-		//printf("before join\n");
+		printf("join\n");
 		pthread_join(philosophers[i].thread_id, NULL);
 		pthread_mutex_destroy(&parameters.forks[i]);
 		i++;
 	}
-	pthread_mutex_destroy(&parameters.message);
+	//pthread_mutex_destroy(&parameters.message);
 	free(parameters.forks);
 	free(philosophers);
 }

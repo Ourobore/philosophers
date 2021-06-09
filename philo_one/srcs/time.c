@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 16:47:21 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/03 14:05:14 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/09 13:59:46 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,17 @@ unsigned long int	get_timestamp(unsigned long int old_time)
 	time = get_time();
 	timestamp = time - old_time;
 	return (timestamp);
+}
+
+int	should_die(t_philo philosopher, unsigned long time_die)
+{
+	int	should_die;
+
+	if (get_timestamp(philosopher.last_eat) < time_die)
+		should_die = 1;
+	else
+		should_die = 0;
+	return (should_die);
 }
 
 void	ft_usleep(unsigned long int	time_ms)

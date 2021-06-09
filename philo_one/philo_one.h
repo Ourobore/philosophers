@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:02 by user42            #+#    #+#             */
-/*   Updated: 2021/06/08 12:54:12 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/09 13:59:38 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_params
 	int					time_eat;
 	int					time_sleep;
 	int					nb_eat;
+	//int					end_threads;
 	unsigned long int	start_time;
 	pthread_mutex_t		*forks;
 	pthread_mutex_t		message;
@@ -41,6 +42,8 @@ typedef struct s_philo
 	int					id;
 	int					nb_eat;
 	unsigned long int	last_eat;
+	int					end_thread;
+	pthread_t			thread_id;
 	pthread_mutex_t		left_fork;
 	pthread_mutex_t		right_fork;
 	pthread_mutex_t		*message;
@@ -67,7 +70,8 @@ t_params			init_parameters(t_philo *philosophers, t_params params);
 pthread_t			launch_philosphers(t_philo *philosophers, \
 									t_params parameters);
 void				*philosopher_loop(void *void_philo);
-t_params			clean_parameters(t_params params);
+void				clean_parameters(t_philo *philosophers, \
+									t_params parameters);
 void				*philosopher_monitor(void *void_philosophers);
 
 /*
@@ -75,6 +79,7 @@ void				*philosopher_monitor(void *void_philosophers);
 */
 unsigned long int	get_time(void);
 unsigned long int	get_timestamp(unsigned long int old_time);
+int					should_die(t_philo philosopher, unsigned long time_die);
 void				ft_usleep(unsigned long int	time_ms);
 
 /*

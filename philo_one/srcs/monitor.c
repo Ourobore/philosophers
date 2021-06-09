@@ -6,23 +6,24 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 12:08:15 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/09 15:33:08 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/09 16:07:07 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo_one.h"
 
-void	end_threads(t_philo *philosophers, t_params parameters)
+void	end_threads(t_philo *philosophers, t_params parameters, int id)
 {
 	int	i;
 
 	i = 0;
 	while (i < parameters.nb_philo)
 	{
-		philosophers[i].end_thread = 1;
+		if (i != id)
+			philosophers[i].end_thread = 1;
 		i++;
 	}
-	ft_usleep(parameters.time_die + parameters.time_sleep);
+	ft_usleep(parameters.time_die);
 }
 
 void	*philosopher_monitor(void *void_philosophers)
@@ -46,13 +47,9 @@ void	*philosopher_monitor(void *void_philosophers)
 			last_eat = get_timestamp(parameters.philosophers[i].last_eat);
 			if (last_eat > (unsigned long int)parameters.time_die)
 			{
-				end_threads(philosophers, parameters);
+				end_threads(philosophers, parameters, i);
 				print_die(get_timestamp(parameters.start_time), philosophers[i]);
-				//end_threads(philosophers, parameters);
-				//for (int j=0; j< parameters.nb_philo; j++)
-				//	philosophers[j].end_thread = 1;
-				//ft_usleep(parameters.time_die);
-				//pthread_mutex_unlock(&parameters.message);
+				philosophers[i].end_thread = 1;
 				return (NULL);
 			}
 			if (parameters.nb_eat != -1 && philosophers->nb_eat < parameters.nb_eat)
@@ -61,15 +58,8 @@ void	*philosopher_monitor(void *void_philosophers)
 		}
 		if (parameters.nb_eat != -1 && eating_done)
 		{
-			//for (int j=0; j< parameters.nb_philo; j++)
-			//	philosophers[j].end_thread = 1;
-			//ft_usleep(parameters.time_die);
-			//pthread_mutex_unlock(&parameters.message);
-			//printf("here\n");
-			//pthread_mutex_lock(&parameters.message);
-			end_threads(philosophers, parameters);
+			end_threads(philosophers, parameters, -1);
 			printf("Each philosphers ate at least %d times. End of simulation\n", parameters.nb_eat);
-			//pthread_mutex_unlock(&parameters.message);
 			return (NULL);
 		}
 		usleep(1000);

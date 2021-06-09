@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 17:07:52 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/09 15:18:15 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/09 16:10:00 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ void	*philosopher_loop(void *void_philosopher)
 	parameters = *philosopher->parameters;
 	while (!philosopher->end_thread)
 	{
-		printf("end_thread: %d\n", philosopher->end_thread);
 		pthread_mutex_lock(&philosopher->left_fork);
 		print_fork(get_timestamp(parameters.start_time), *philosopher);
 		pthread_mutex_lock(&philosopher->right_fork);
@@ -89,7 +88,7 @@ void	*philosopher_loop(void *void_philosopher)
 		ft_usleep(parameters.time_sleep);
 		print_think(get_timestamp(parameters.start_time), *philosopher);
 	}
-	printf("[%d]end: %d\n", philosopher->id, philosopher->end_thread);
+	//printf("[%d]end: %d\n", philosopher->id, philosopher->end_thread);
 	return (NULL);
 }
 
@@ -101,7 +100,7 @@ void	clean_parameters(t_philo *philosophers, t_params parameters)
 	ft_usleep(parameters.time_die);
 	while (i < parameters.nb_philo)
 	{
-		printf("join\n");
+		//printf("join\n");
 		pthread_join(philosophers[i].thread_id, NULL);
 		pthread_mutex_destroy(&parameters.forks[i]);
 		i++;

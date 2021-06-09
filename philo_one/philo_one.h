@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:02 by user42            #+#    #+#             */
-/*   Updated: 2021/06/09 14:34:38 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/09 16:07:34 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void			*philosopher_loop(void *void_philo);
 void			clean_parameters(t_philo *philosophers, \
 									t_params parameters);
 void			*philosopher_monitor(void *void_philosophers);
-void			end_threads(t_philo *philosophers, t_params parameters);
+void			end_threads(t_philo *philosophers, t_params parameters, int id);
 
 
 

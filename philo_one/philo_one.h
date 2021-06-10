@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:02 by user42            #+#    #+#             */
-/*   Updated: 2021/06/10 11:30:49 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/10 12:12:11 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ typedef struct s_philo
 	int				nb_eat;
 	unsigned long	last_eat;
 	int				end_thread;
-	pthread_t		thread_id;
 	pthread_mutex_t	left_fork;
 	pthread_mutex_t	right_fork;
 	pthread_mutex_t	*message;
@@ -72,7 +71,6 @@ void			*philosopher_loop(void *void_philo);
 void			clean_parameters(t_philo *philosophers, \
 									t_params parameters);
 void			*philosopher_monitor(void *void_philosophers);
-void			end_threads(t_philo *philosophers, t_params parameters);
 
 
 
@@ -90,7 +88,7 @@ void			print_fork(t_philo philosopher, t_params parameters);
 void			print_eat(t_philo philosopher, t_params parameters);
 void			print_sleep(t_philo philosopher, t_params parameters);
 void			print_think(t_philo philosopher, t_params parameters);
-void			print_die(t_params parameters, int philosopher_id);
+void			print_die(t_philo philosopher, t_params parameters);
 
 /*
 ** Utility

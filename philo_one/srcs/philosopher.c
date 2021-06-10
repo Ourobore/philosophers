@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 17:07:52 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/10 11:35:01 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/10 11:54:28 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ pthread_t	launch_philosphers(t_philo *philosophers, t_params parameters)
 	i = 0;
 	while (i < parameters.nb_philo)
 	{
-		pthread_create(&philosophers[i].thread_id, NULL, \
-					&philosopher_loop, &philosophers[i]);
+		pthread_create(&id, NULL, &philosopher_loop, &philosophers[i]);
+		pthread_detach(id);
 		usleep(50);
 		if (i + 2 >= parameters.nb_philo && i % 2 == 0)
 			i = 1;
@@ -98,7 +98,6 @@ void	clean_parameters(t_philo *philosophers, t_params parameters)
 	i = 0;
 	while (i < parameters.nb_philo)
 	{
-		pthread_join(philosophers[i].thread_id, NULL);
 		pthread_mutex_destroy(&parameters.forks[i]);
 		i++;
 	}

@@ -6,24 +6,11 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 12:08:15 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/10 11:43:02 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/10 12:11:59 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo_one.h"
-
-void	end_threads(t_philo *philosophers, t_params parameters)
-{
-	int	i;
-
-	i = 0;
-	while (i < parameters.nb_philo)
-	{
-		philosophers[i].end_thread = 1;
-		i++;
-	}
-	//ft_usleep(parameters.time_die);
-}
 
 void	*philosopher_monitor(void *void_philosophers)
 {
@@ -46,8 +33,7 @@ void	*philosopher_monitor(void *void_philosophers)
 			last_eat = get_timestamp(philosophers[i].last_eat);
 			if (last_eat > (unsigned long int)parameters.time_die)
 			{
-				end_threads(philosophers, parameters);
-				print_die(parameters, i + 1);
+				print_die(philosophers[i], parameters);
 				return (NULL);
 			}
 			if (parameters.nb_eat != -1 && philosophers->nb_eat < parameters.nb_eat)
@@ -56,7 +42,7 @@ void	*philosopher_monitor(void *void_philosophers)
 		}
 		if (parameters.nb_eat != -1 && eating_done)
 		{
-			end_threads(philosophers, parameters);
+			pthread_mutex_lock(&parameters.message);
 			printf("Each philosphers ate at least %d times. End of simulation\n", parameters.nb_eat);
 			return (NULL);
 		}

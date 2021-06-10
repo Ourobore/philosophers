@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:02 by user42            #+#    #+#             */
-/*   Updated: 2021/06/10 16:00:39 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/10 17:20:12 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,10 @@ pthread_mutex_t	*init_forks(t_params *parameters);
 */
 int				init_parameters(t_philo *philosophers, t_params *parameters);
 pthread_t		launch_philosphers(t_philo *philosophers, \
-									t_params parameters);
+									t_params *parameters);
 void			*philosopher_loop(void *void_philo);
 void			clean_parameters(t_philo *philosophers, \
-									t_params parameters);
+									t_params *parameters);
 void			*philosopher_monitor(void *void_philosophers);
 
 

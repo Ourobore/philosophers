@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 13:16:18 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/10 16:36:38 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/10 17:08:54 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,21 +40,6 @@ int	get_parameters(char *argv[], t_params *parameters)
 	return (1);
 }
 
-t_philo	*init_philo(t_params *parameters)
-{
-	t_philo	*philosophers;
-
-	philosophers = NULL;
-	philosophers = malloc(sizeof(t_philo) * parameters->nb_philo);
-	if (!philosophers)
-	{
-		free(parameters);
-		return (NULL);
-	}
-	memset(philosophers, 0, parameters->nb_philo);
-	return (philosophers);
-}
-
 pthread_mutex_t	*init_forks(t_params *parameters)
 {
 	pthread_mutex_t	*forks;
@@ -62,10 +47,7 @@ pthread_mutex_t	*init_forks(t_params *parameters)
 	forks = NULL;
 	forks = malloc(sizeof(pthread_mutex_t) * parameters->nb_philo);
 	if (!forks)
-	{
-		printf("Error: malloc failed\n");
 		return (NULL);
-	}
 	memset(forks, 0, parameters->nb_philo);
 	return (forks);
 }

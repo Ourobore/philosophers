@@ -6,11 +6,39 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 17:07:52 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/10 17:03:18 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/10 17:20:07 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo_one.h"
+
+int	mutex_initialization(t_params *parameters)
+{
+	int	i;
+
+	if (pthread_mutex_init(&parameters->message, NULL) != 0)
+	{
+		printf("Error: mutex init failed\n");
+		return (0);
+	}
+	parameters->forks = init_forks(parameters);
+	if (!parameters->forks)
+	{
+		printf("Error: malloc failed\n");
+		return (0);
+	}
+	i = 0;
+	while (i < parameters->nb_philo)
+	{
+		if (pthread_mutex_init(&parameters->forks[i], NULL) != 0)
+		{
+			printf("Error: mutex init failed\n");
+			return (0);
+		}
+		i++;
+	}
+	return (1);
+}
 
 int	init_parameters(t_philo *philosophers, t_params *parameters)
 {
@@ -18,6 +46,7 @@ int	init_parameters(t_philo *philosophers, t_params *parameters)
 
 	i = 0;
 	parameters->start_time = get_time();
+	/*
 	if (pthread_mutex_init(&parameters->message, NULL) != 0)
 		return (0);
 		//print_error("Error: mutex init failed", 5);
@@ -27,6 +56,12 @@ int	init_parameters(t_philo *philosophers, t_params *parameters)
 			return (0);
 			//print_error("Error: mutex init failed", 5);
 		i++;
+	}
+	*/
+	if (!mutex_initialization(parameters))
+	{
+		free_structures(philosophers, parameters);
+		return (0);
 	}
 	i = 0;
 	while (i < parameters->nb_philo)
@@ -47,18 +82,18 @@ int	init_parameters(t_philo *philosophers, t_params *parameters)
 	return (1);
 }
 
-pthread_t	launch_philosphers(t_philo *philosophers, t_params parameters)
+pthread_t	launch_philosphers(t_philo *philosophers, t_params *parameters)
 {
 	int			i;
 	pthread_t	id;
 
 	i = 0;
-	while (i < parameters.nb_philo)
+	while (i < parameters->nb_philo)
 	{
 		pthread_create(&id, NULL, &philosopher_loop, &philosophers[i]);
 		pthread_detach(id);
 		usleep(50);
-		if (i + 2 >= parameters.nb_philo && i % 2 == 0)
+		if (i + 2 >= parameters->nb_philo && i % 2 == 0)
 			i = 1;
 		else
 			i += 2;
@@ -93,17 +128,18 @@ void	*philosopher_loop(void *void_philosopher)
 	return (NULL);
 }
 
-void	clean_parameters(t_philo *philosophers, t_params parameters)
+void	clean_parameters(t_philo *philosophers, t_params *parameters)
 {
 	int	i;
 
 	i = 0;
-	while (i < parameters.nb_philo)
+	while (i < parameters->nb_philo)
 	{
-		pthread_mutex_destroy(&parameters.forks[i]);
+		pthread_mutex_destroy(&parameters->forks[i]);
 		i++;
 	}
-	pthread_mutex_destroy(&parameters.message);
-	free(parameters.forks);
+	pthread_mutex_destroy(&parameters->message);
+	free(parameters->forks);
 	free(philosophers);
+	free(parameters);
 }

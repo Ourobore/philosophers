@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:02 by user42            #+#    #+#             */
-/*   Updated: 2021/06/10 17:20:12 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/10 17:45:15 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ typedef struct s_philo	t_philo;
 typedef struct s_params
 {
 	int				nb_philo;
+	int				nb_eat;
 	int				time_die;
 	int				time_eat;
 	int				time_sleep;
-	int				nb_eat;
 	unsigned long	start_time;
 	pthread_mutex_t	*forks;
 	pthread_mutex_t	message;
@@ -41,7 +41,6 @@ typedef struct s_philo
 	int				id;
 	int				nb_eat;
 	unsigned long	last_eat;
-	int				end_thread;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	*message;
@@ -57,22 +56,19 @@ int				lil_atoi(const char *str);
 /*
 ** Initialization
 */
-t_philo			*init_philo(t_params *parameters);
+int				initial_setup(t_philo **philosophers, \
+							t_params **parameters, char *argv[]);
+int				init_parameters(t_philo *philosophers, t_params *parameters);
 pthread_mutex_t	*init_forks(t_params *parameters);
 
 
 /*
 ** Philosopher functions
 */
-int				init_parameters(t_philo *philosophers, t_params *parameters);
 pthread_t		launch_philosphers(t_philo *philosophers, \
 									t_params *parameters);
 void			*philosopher_loop(void *void_philo);
-void			clean_parameters(t_philo *philosophers, \
-									t_params *parameters);
 void			*philosopher_monitor(void *void_philosophers);
-
-
 
 /*
 ** Time functions
@@ -93,7 +89,6 @@ void			print_die(t_philo philosopher, t_params parameters);
 /*
 ** Utility
 */
-void			*no_error(char *message, void *arg);
 void			free_structures(t_philo *philosophers, t_params *parameters);
 
 

@@ -6,35 +6,11 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:06 by user42            #+#    #+#             */
-/*   Updated: 2021/06/10 17:19:19 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/10 17:44:57 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_one.h"
-
-int	initial_setup(t_philo **philosophers, t_params **parameters, char *argv[])
-{
-	*parameters = malloc(sizeof(t_params) * 1);
-	if (!*parameters)
-	{
-		printf("Error: malloc failed\n");
-		return (0);
-	}
-	if (!get_parameters(argv, *parameters))
-	{
-		printf("Error: invalid argument\n");
-		free(*parameters);
-		return (0);
-	}
-	*philosophers = malloc(sizeof(t_philo) * (*parameters)->nb_philo);
-	if (!*philosophers)
-	{
-		printf("Error: malloc failed\n");
-		free(*parameters);
-		return (0);
-	}
-	return (1);
-}
 
 int	main(int argc, char *argv[])
 {
@@ -53,18 +29,10 @@ int	main(int argc, char *argv[])
 		return (1);
 	parameters->philosophers = philosophers;
 	philosophers->parameters = parameters;
-	/*
-	parameters->forks = init_forks(parameters);
-	if (!parameters->forks)
-	{
-		free_structures(philosophers, parameters);
-		return (1);
-	}
-	*/
 	if (!init_parameters(philosophers, parameters))
 		return (1);
 	monitor_id = launch_philosphers(philosophers, parameters);
 	pthread_join(monitor_id, NULL);
-	clean_parameters(philosophers, parameters);
+	free_structures(philosophers, parameters);
 	return (0);
 }

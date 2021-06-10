@@ -6,11 +6,35 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 13:16:18 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/10 17:08:54 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/10 17:39:37 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo_one.h"
+
+int	initial_setup(t_philo **philosophers, t_params **parameters, char *argv[])
+{
+	*parameters = malloc(sizeof(t_params) * 1);
+	if (!*parameters)
+	{
+		printf("Error: malloc failed\n");
+		return (0);
+	}
+	if (!get_parameters(argv, *parameters))
+	{
+		printf("Error: invalid argument\n");
+		free(*parameters);
+		return (0);
+	}
+	*philosophers = malloc(sizeof(t_philo) * (*parameters)->nb_philo);
+	if (!*philosophers)
+	{
+		printf("Error: malloc failed\n");
+		free(*parameters);
+		return (0);
+	}
+	return (1);
+}
 
 int	get_parameters(char *argv[], t_params *parameters)
 {

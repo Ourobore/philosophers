@@ -17,7 +17,7 @@ CFLAGS	=	-Wall -Wextra -Werror -pthread
 
 FSAN	=	-g3 -fsanitize=address
 
-NAME	=	philo_one
+NAME	=	philo
 
 all		:	$(NAME)
 

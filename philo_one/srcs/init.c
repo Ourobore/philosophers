@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 13:16:18 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/10 17:39:37 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/11 09:28:06 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ int	initial_setup(t_philo **philosophers, t_params **parameters, char *argv[])
 	if (!get_parameters(argv, *parameters))
 	{
 		printf("Error: invalid argument\n");
+		free(*parameters);
+		return (0);
+	}
+	if ((*parameters)->nb_philo == 0)
+	{
 		free(*parameters);
 		return (0);
 	}

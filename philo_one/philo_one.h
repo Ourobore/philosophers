@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:02 by user42            #+#    #+#             */
-/*   Updated: 2021/06/10 17:45:15 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/11 09:16:18 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ typedef struct s_params
 	int				time_eat;
 	int				time_sleep;
 	unsigned long	start_time;
-	pthread_mutex_t	*forks;
 	pthread_mutex_t	message;
+	pthread_mutex_t	*forks;
 	t_philo			*philosophers;
-}						t_params;
+}					t_params;
 
 typedef struct s_philo
 {
@@ -43,9 +43,8 @@ typedef struct s_philo
 	unsigned long	last_eat;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
-	pthread_mutex_t	*message;
 	t_params		*parameters;
-}						t_philo;
+}					t_philo;
 
 /*
 ** Parsing
@@ -80,11 +79,11 @@ void			ft_usleep(unsigned long int	time_ms);
 /*
 ** Print message
 */
-void			print_fork(t_philo philosopher, t_params parameters);
-void			print_eat(t_philo philosopher, t_params parameters);
-void			print_sleep(t_philo philosopher, t_params parameters);
-void			print_think(t_philo philosopher, t_params parameters);
-void			print_die(t_philo philosopher, t_params parameters);
+void			print_fork(int philo_id, t_params *parameters);
+void			print_eat(int philo_id, t_params *parameters);
+void			print_sleep(int philo_id, t_params *parameters);
+void			print_think(int philo_id, t_params *parameters);
+void			print_die(int philo_id, t_params *parameters);
 
 /*
 ** Utility

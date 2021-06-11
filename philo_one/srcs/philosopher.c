@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 17:07:52 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/10 17:45:08 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/11 09:30:42 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,10 +54,9 @@ int	init_parameters(t_philo *philosophers, t_params *parameters)
 	while (i < parameters->nb_philo)
 	{
 		philosophers[i].id = i + 1;
-		philosophers[i].parameters = parameters;
-		philosophers[i].message = &parameters->message;
-		philosophers[i].last_eat = parameters->start_time;
 		philosophers[i].nb_eat = 0;
+		philosophers[i].parameters = parameters;
+		philosophers[i].last_eat = parameters->start_time;
 		philosophers[i].left_fork = &parameters->forks[i];
 		if (i == parameters->nb_philo - 1)
 			philosophers[i].right_fork = &parameters->forks[0];
@@ -74,7 +73,7 @@ pthread_t	launch_philosphers(t_philo *philosophers, t_params *parameters)
 	pthread_t	id;
 
 	i = 0;
-	while (i < parameters->nb_philo)
+	while (i < parameters->nb_philo && parameters->nb_eat != 0)
 	{
 		pthread_create(&id, NULL, &philosopher_loop, &philosophers[i]);
 		pthread_detach(id);
@@ -98,17 +97,17 @@ void	*philosopher_loop(void *void_philosopher)
 	while (1)
 	{
 		pthread_mutex_lock(philosopher->left_fork);
-		print_fork(*philosopher, *parameters);
+		print_fork((*philosopher).id, parameters);
 		pthread_mutex_lock(philosopher->right_fork);
-		print_fork(*philosopher, *parameters);
-		print_eat(*philosopher, *parameters);
+		print_fork((*philosopher).id, parameters);
+		print_eat((*philosopher).id, parameters);
 		philosopher->last_eat = get_time();
 		ft_usleep(parameters->time_eat);
 		philosopher->nb_eat++;
 		pthread_mutex_unlock(philosopher->left_fork);
 		pthread_mutex_unlock(philosopher->right_fork);
-		print_sleep(*philosopher, *parameters);
+		print_sleep((*philosopher).id, parameters);
 		ft_usleep(parameters->time_sleep);
-		print_think(*philosopher, *parameters);
+		print_think((*philosopher).id, parameters);
 	}
 }

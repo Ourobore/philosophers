@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:02 by user42            #+#    #+#             */
-/*   Updated: 2021/06/11 09:52:23 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/11 09:58:50 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ int				initial_setup(t_philo **philosophers, \
 int				init_parameters(t_philo *philosophers, t_params *parameters);
 pthread_mutex_t	*init_forks(t_params *parameters);
 
-
 /*
 ** Philosopher functions
 */
@@ -91,6 +90,5 @@ void			print_die(int philo_id, t_params *parameters);
 ** Utility
 */
 void			free_structures(t_philo *philosophers, t_params *parameters);
-
 
 #endif

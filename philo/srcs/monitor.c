@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 12:08:15 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/11 09:53:25 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/11 10:06:27 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	*philosopher_monitor(void *void_philosophers)
 		eating_done = verify_death(philosophers, parameters, eating_done);
 		if (eating_done == -1)
 			return (NULL);
-		if (parameters->nb_eat != -1 && eating_done)
+		if (parameters->nb_eat != -1 && eating_done == 1)
 		{
 			pthread_mutex_lock(&parameters->message);
 			printf("Each philosphers ate at least %d times. " \

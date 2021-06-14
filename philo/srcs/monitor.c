@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 12:08:15 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/14 13:18:51 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/14 14:31:18 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ int	verify_death(t_philo *philosophers, t_params *parameters, int eating_done)
 		if (last_eat > (unsigned long int)parameters->time_die)
 		{
 			print_die(philosophers[i].id, parameters);
+			pthread_mutex_lock(&parameters->end);
 			parameters->end_threads = 1;
+			pthread_mutex_unlock(&parameters->end);
 			pthread_mutex_unlock(philosophers[i].eating_lock);
 			return (-1);
 		}
@@ -37,6 +39,17 @@ int	verify_death(t_philo *philosophers, t_params *parameters, int eating_done)
 		i++;
 	}
 	return (eating_done);
+}
+
+void	print_end(t_params *parameters)
+{
+	pthread_mutex_lock(&parameters->message);
+	printf("Each philosphers ate at least %d times. " \
+			"End of simulation\n", parameters->nb_eat);
+	pthread_mutex_lock(&parameters->end);
+	parameters->end_threads = 1;
+	pthread_mutex_unlock(&parameters->end);
+	pthread_mutex_unlock(&parameters->message);
 }
 
 void	*philosopher_monitor(void *void_philosophers)
@@ -57,11 +70,7 @@ void	*philosopher_monitor(void *void_philosophers)
 			return (NULL);
 		if (parameters->nb_eat != -1 && eating_done == 1)
 		{
-			pthread_mutex_lock(&parameters->message);
-			printf("Each philosphers ate at least %d times. " \
-					"End of simulation\n", parameters->nb_eat);
-			parameters->end_threads = 1;
-			pthread_mutex_unlock(&parameters->message);
+			print_end(parameters);
 			return (NULL);
 		}
 		usleep(1000);

@@ -6,11 +6,23 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:06 by user42            #+#    #+#             */
-/*   Updated: 2021/06/11 10:00:36 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/14 14:39:05 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	join_threads(t_philo *philosophers, t_params *parameters)
+{
+	int	i;
+
+	i = 0;
+	while (i < parameters->nb_philo)
+	{
+		pthread_join(philosophers[i].thread_id, NULL);
+		i++;
+	}
+}
 
 int	main(int argc, char *argv[])
 {
@@ -33,6 +45,7 @@ int	main(int argc, char *argv[])
 		return (1);
 	monitor_id = launch_philosphers(philosophers, parameters);
 	pthread_join(monitor_id, NULL);
+	join_threads(philosophers, parameters);
 	free_structures(philosophers, parameters);
 	return (0);
 }

@@ -6,40 +6,17 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 17:07:52 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/14 13:23:02 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/14 15:16:21 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-int	mutex_init(t_philo *philosophers, t_params *parameters)
-{
-	//int	i;
-
-	if (pthread_mutex_init(&parameters->message, NULL) != 0)
-	{
-		printf("Error: mutex init failed\n");
-		return (0);
-	}
-	parameters->forks = init_forks(parameters);
-	if (!parameters->forks)
-	{
-		printf("Error: malloc failed\n");
-		return (0);
-	}
-	parameters->mutexes_eating = malloc(sizeof(pthread_mutex_t) * parameters->nb_philo);
-	parameters->mutexes_nb_eat = malloc(sizeof(pthread_mutex_t) * parameters->nb_philo);
-	if (!philo_mutex_init(philosophers, parameters))
-		return (0);
-	return (1);
-}
-
-int	philo_mutex_init(t_philo *philosophers, t_params *parameters)
+int	mutex_init(t_params *parameters)
 {
 	int	i;
 
 	i = 0;
-	(void)philosophers;
 	while (i < parameters->nb_philo)
 	{
 		if (pthread_mutex_init(&parameters->forks[i], NULL) != 0)
@@ -62,11 +39,34 @@ int	philo_mutex_init(t_philo *philosophers, t_params *parameters)
 	return (1);
 }
 
+int	mutex_creation(t_params *parameters)
+{
+	if (pthread_mutex_init(&parameters->message, NULL) != 0)
+	{
+		printf("Error: mutex init failed\n");
+		return (0);
+	}
+	if (!malloc_mutexes(&parameters))
+		return (0);
+	if (!mutex_init(parameters))
+		return (0);
+	return (1);
+}
+
+void	give_forks(t_philo *philosophers, t_params *parameters, int i)
+{
+	philosophers[i].left_fork = &parameters->forks[i];
+	if (i == parameters->nb_philo - 1)
+		philosophers[i].right_fork = &parameters->forks[0];
+	else
+		philosophers[i].right_fork = &parameters->forks[i + 1];
+}
+
 int	init_parameters(t_philo *philosophers, t_params *parameters)
 {
 	int	i;
 
-	if (!mutex_init(philosophers, parameters))
+	if (!mutex_creation(parameters))
 	{
 		free_structures(philosophers, parameters);
 		return (0);
@@ -82,62 +82,8 @@ int	init_parameters(t_philo *philosophers, t_params *parameters)
 		philosophers[i].last_eat = parameters->start_time;
 		philosophers[i].eating_lock = &parameters->mutexes_eating[i];
 		philosophers[i].nb_eat_lock = &parameters->mutexes_nb_eat[i];
-		philosophers[i].left_fork = &parameters->forks[i];
-		if (i == parameters->nb_philo - 1)
-			philosophers[i].right_fork = &parameters->forks[0];
-		else
-			philosophers[i].right_fork = &parameters->forks[i + 1];
+		give_forks(philosophers, parameters, i);
 		i++;
 	}
 	return (1);
-}
-
-pthread_t	launch_philosphers(t_philo *philosophers, t_params *parameters)
-{
-	int			i;
-	pthread_t	monitor_id;
-
-	i = 0;
-	while (i < parameters->nb_philo && parameters->nb_eat != 0)
-	{
-		pthread_create(&philosophers[i].thread_id, NULL, &philosopher_loop, &philosophers[i]);
-		//pthread_detach(id);
-		usleep(50);
-		if (i + 2 >= parameters->nb_philo && i % 2 == 0)
-			i = 1;
-		else
-			i += 2;
-	}
-	pthread_create(&monitor_id, NULL, &philosopher_monitor, philosophers);
-	return (monitor_id);
-}
-
-void	*philosopher_loop(void *void_philosopher)
-{
-	t_params	*parameters;
-	t_philo		*philosopher;
-
-	philosopher = void_philosopher;
-	parameters = philosopher->parameters;
-	while (!parameters->end_threads)
-	{
-		pthread_mutex_lock(philosopher->left_fork);
-		print_fork((*philosopher).id, parameters);
-		pthread_mutex_lock(philosopher->right_fork);
-		print_fork((*philosopher).id, parameters);
-		pthread_mutex_lock(philosopher->eating_lock);
-		print_eat((*philosopher).id, parameters);
-		philosopher->last_eat = get_time();
-		pthread_mutex_unlock(philosopher->eating_lock);
-		ft_usleep(parameters->time_eat);
-		pthread_mutex_unlock(philosopher->left_fork);
-		pthread_mutex_unlock(philosopher->right_fork);
-		pthread_mutex_lock(philosopher->nb_eat_lock);
-		philosopher->nb_eat++;
-		pthread_mutex_unlock(philosopher->nb_eat_lock);
-		print_sleep((*philosopher).id, parameters);
-		ft_usleep(parameters->time_sleep);
-		print_think((*philosopher).id, parameters);
-	}
-	return (NULL);
 }

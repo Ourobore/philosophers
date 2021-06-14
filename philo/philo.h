@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:02 by user42            #+#    #+#             */
-/*   Updated: 2021/06/11 09:58:50 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/14 13:14:53 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,12 @@ typedef struct s_params
 	int				time_die;
 	int				time_eat;
 	int				time_sleep;
+	int				end_threads;
 	unsigned long	start_time;
 	pthread_mutex_t	message;
 	pthread_mutex_t	*forks;
+	pthread_mutex_t	*mutexes_eating;
+	pthread_mutex_t	*mutexes_nb_eat;
 	t_philo			*philosophers;
 }					t_params;
 
@@ -41,8 +44,11 @@ typedef struct s_philo
 	int				id;
 	int				nb_eat;
 	unsigned long	last_eat;
+	pthread_t		thread_id;
 	pthread_mutex_t	*left_fork;
 	pthread_mutex_t	*right_fork;
+	pthread_mutex_t	*eating_lock;
+	pthread_mutex_t	*nb_eat_lock;
 	t_params		*parameters;
 }					t_philo;
 
@@ -59,6 +65,9 @@ int				initial_setup(t_philo **philosophers, \
 							t_params **parameters, char *argv[]);
 int				init_parameters(t_philo *philosophers, t_params *parameters);
 pthread_mutex_t	*init_forks(t_params *parameters);
+int				mutex_init(t_philo *philosophers, t_params *parameters);
+int				philo_mutex_init(t_philo *philosophers, t_params *parameters);
+
 
 /*
 ** Philosopher functions

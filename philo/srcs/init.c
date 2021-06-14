@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 13:16:18 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/11 10:32:56 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/14 13:25:18 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,16 @@ void	free_structures(t_philo *philosophers, t_params *parameters)
 		{
 			while (i < parameters->nb_philo)
 			{
+				pthread_join(philosophers[i].thread_id, NULL);
 				pthread_mutex_destroy(&parameters->forks[i]);
+				pthread_mutex_destroy(&parameters->mutexes_eating[i]);
+				pthread_mutex_destroy(&parameters->mutexes_nb_eat[i]);
 				i++;
 			}
 			free(parameters->forks);
 		}
+		free(parameters->mutexes_eating);
+		free(parameters->mutexes_nb_eat);
 		free(parameters);
 	}
 }

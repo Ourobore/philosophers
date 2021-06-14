@@ -13,7 +13,7 @@ OBJS	:=	$(SRCS:.c=.o)
 
 CC		=	clang
 
-CFLAGS	=	-Wall -Wextra -Werror -pthread
+CFLAGS	=	-Wall -Wextra -Werror -pthread #-g3 -fsanitize=thread
 
 FSAN	=	-g3 -fsanitize=address
 

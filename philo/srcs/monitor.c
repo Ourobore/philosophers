@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/07 12:08:15 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/14 14:31:18 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/14 16:30:02 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,6 @@ int	verify_death(t_philo *philosophers, t_params *parameters, int eating_done)
 		if (last_eat > (unsigned long int)parameters->time_die)
 		{
 			print_die(philosophers[i].id, parameters);
-			pthread_mutex_lock(&parameters->end);
-			parameters->end_threads = 1;
-			pthread_mutex_unlock(&parameters->end);
 			pthread_mutex_unlock(philosophers[i].eating_lock);
 			return (-1);
 		}

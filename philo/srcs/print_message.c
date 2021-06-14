@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 15:32:50 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/14 13:46:46 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/14 16:30:17 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,10 @@ void	print_die(int philo_id, t_params *parameters)
 	unsigned long	timestamp;
 
 	pthread_mutex_lock(&parameters->message);
+	timestamp = get_timestamp(parameters->start_time);
+	printf("[%lu] Philosopher [%d] died\n", timestamp, philo_id);
 	pthread_mutex_lock(&parameters->end);
-	if (!parameters->end_threads)
-	{
-		timestamp = get_timestamp(parameters->start_time);
-		printf("[%lu] Philosopher [%d] died\n", timestamp, philo_id);
-	}
+	parameters->end_threads = 1;
 	pthread_mutex_unlock(&parameters->end);
 	pthread_mutex_unlock(&parameters->message);
 }

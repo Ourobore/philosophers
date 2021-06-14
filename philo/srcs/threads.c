@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/14 14:27:52 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/14 15:37:29 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/14 16:24:48 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,21 @@ void	get_forks(t_philo *philosopher, t_params *parameters)
 	print_fork((*philosopher).id, parameters);
 }
 
+int	should_end(t_params *parameters)
+{
+	pthread_mutex_lock(&parameters->end);
+	if (parameters->end_threads == 1)
+	{
+		pthread_mutex_unlock(&parameters->end);
+		return (1);
+	}
+	else
+	{
+		pthread_mutex_unlock(&parameters->end);
+		return (0);
+	}
+}
+
 void	*philosopher_loop(void *void_philosopher)
 {
 	t_params	*parameters;
@@ -55,7 +70,7 @@ void	*philosopher_loop(void *void_philosopher)
 
 	philosopher = void_philosopher;
 	parameters = philosopher->parameters;
-	while (!parameters->end_threads)
+	while (!should_end(parameters))
 	{
 		get_forks(philosopher, parameters);
 		pthread_mutex_lock(philosopher->eating_lock);

@@ -6,30 +6,38 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/14 14:27:52 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/14 14:39:21 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/14 15:37:29 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-pthread_t	launch_philosphers(t_philo *philosophers, t_params *parameters)
+int	launch_threads(t_philo *philo, t_params *params, pthread_t *monitor_id)
 {
 	int			i;
-	pthread_t	monitor_id;
 
 	i = 0;
-	while (i < parameters->nb_philo && parameters->nb_eat != 0)
+	while (i < params->nb_philo && params->nb_eat != 0)
 	{
-		pthread_create(&philosophers[i].thread_id, NULL, \
-						&philosopher_loop, &philosophers[i]);
+		if (pthread_create(&philo[i].thread_id, NULL, \
+						&philosopher_loop, &philo[i]) != 0)
+		{
+			printf("Error: thread_creation failed\n");
+			return (0);
+		}
 		usleep(50);
-		if (i + 2 >= parameters->nb_philo && i % 2 == 0)
+		if (i + 2 >= params->nb_philo && i % 2 == 0)
 			i = 1;
 		else
 			i += 2;
 	}
-	pthread_create(&monitor_id, NULL, &philosopher_monitor, philosophers);
-	return (monitor_id);
+	if (pthread_create(monitor_id, NULL, \
+					&philosopher_monitor, philo) != 0)
+	{
+		printf("Error: thread_creation failed\n");
+		return (0);
+	}
+	return (1);
 }
 
 void	get_forks(t_philo *philosopher, t_params *parameters)

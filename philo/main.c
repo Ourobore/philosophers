@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:06 by user42            #+#    #+#             */
-/*   Updated: 2021/06/14 14:39:05 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/14 15:40:01 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,8 @@ int	main(int argc, char *argv[])
 	philosophers->parameters = parameters;
 	if (!init_parameters(philosophers, parameters))
 		return (1);
-	monitor_id = launch_philosphers(philosophers, parameters);
+	if (!launch_threads(philosophers, parameters, &monitor_id))
+		return (1);
 	pthread_join(monitor_id, NULL);
 	join_threads(philosophers, parameters);
 	free_structures(philosophers, parameters);

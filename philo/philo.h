@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:02 by user42            #+#    #+#             */
-/*   Updated: 2021/06/14 15:16:16 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/14 15:44:41 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ int				malloc_mutexes(t_params **parameters);
 /*
 ** Philosopher functions
 */
-pthread_t		launch_philosphers(t_philo *philosophers, \
-									t_params *parameters);
+int				launch_threads(t_philo *philosophers, \
+								t_params *parameters, pthread_t *monitor_id);
 void			*philosopher_loop(void *void_philo);
 void			*philosopher_monitor(void *void_philosophers);
 

@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 17:07:52 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/14 15:16:21 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/14 15:41:50 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,11 @@ int	mutex_init(t_params *parameters)
 int	mutex_creation(t_params *parameters)
 {
 	if (pthread_mutex_init(&parameters->message, NULL) != 0)
+	{
+		printf("Error: mutex init failed\n");
+		return (0);
+	}
+	if (pthread_mutex_init(&parameters->end, NULL) != 0)
 	{
 		printf("Error: mutex init failed\n");
 		return (0);

@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/02 17:07:52 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/14 15:41:50 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/19 09:55:13 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,16 @@ int	init_parameters(t_philo *philosophers, t_params *parameters)
 		i++;
 	}
 	return (1);
+}
+
+void	detach_threads(t_philo *philosophers, t_params *parameters)
+{
+	int	i;
+
+	i = 0;
+	while (i < parameters->nb_philo)
+	{
+		pthread_detach(philosophers[i].thread_id);
+		i++;
+	}
 }

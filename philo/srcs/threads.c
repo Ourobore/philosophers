@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/14 14:27:52 by lchapren          #+#    #+#             */
-/*   Updated: 2021/06/14 16:24:48 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/19 09:58:50 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	launch_threads(t_philo *philo, t_params *params, pthread_t *monitor_id)
 					&philosopher_monitor, philo) != 0)
 	{
 		printf("Error: thread_creation failed\n");
+		detach_threads(philo, params);
 		return (0);
 	}
 	return (1);

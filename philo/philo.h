@@ -6,7 +6,7 @@
 /*   By: lchapren <lchapren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 10:31:02 by user42            #+#    #+#             */
-/*   Updated: 2021/06/14 15:44:41 by lchapren         ###   ########.fr       */
+/*   Updated: 2021/06/19 09:47:37 by lchapren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,6 @@ void			print_die(int philo_id, t_params *parameters);
 ** Utility
 */
 void			free_structures(t_philo *philosophers, t_params *parameters);
+void			detach_threads(t_philo *philosophers, t_params *parameters);
 
 #endif
